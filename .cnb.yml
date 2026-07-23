@@ -13,6 +13,13 @@ $:
           script: |
             git config --global user.email "cnb-ci@cnb.cool"
             git config --global user.name "CNB CI"
+
+            # 移除 CNB 专属文件，不推送到 GitHub
+            rm -rf .cnb/ .cnb.yml
+            git add -A
+            git commit -m "chore: remove CNB config (auto-generated mirror)" --allow-empty
+
+            # 推送到 GitHub
             git remote add github https://x-access-token:${GITHUB_TOKEN}@github.com/carolcoral/redmine_depending_custom_fields.git
-            git push github --all --force
+            git push github HEAD:refs/heads/${CNB_BRANCH} --force
             git push github --tags --force
