@@ -6,4 +6,4 @@ branch:
         description: 将代码推送到 carolcoral/redmine_depending_custom_fields
         event: web_trigger_push_github
         permissions:
-          roles: [master, developer]
+          roles: [owner]
