@@ -7,7 +7,7 @@ $:
       imports:
         # 密钥仓库需包含 GITHUB_TOKEN（Personal Access Token，需 repo 权限）
         # 请根据实际密钥仓库路径修改此 URL
-        - https://cnb.cool/carolcoral/secret/-/blob/main/github.yml
+        - https://cnb.cool/xindu.site/secret/-/blob/main/token.yaml
       stages:
         - name: push to GitHub
           script: |
