@@ -1,7 +1,11 @@
 require_relative 'lib/redmine_depending_custom_fields'
 require_relative 'lib/redmine_depending_custom_fields/patches/query_custom_field_column_patch'
 require_relative 'lib/redmine_depending_custom_fields/patches/custom_field_patch'
-require_relative 'lib/redmine_depending_custom_fields/patches/context_menus_controller_patch'
+if defined?(ContextMenusController)
+  require_relative 'lib/redmine_depending_custom_fields/patches/context_menus_controller_patch'
+else
+  require_relative 'lib/redmine_depending_custom_fields/patches/issues_controller_patch'
+end
 require_relative 'lib/redmine_depending_custom_fields/patches/issue_import_patch'
 require_relative 'lib/redmine_depending_custom_fields/patches/projects_helper_patch'
 require_relative 'lib/redmine_depending_custom_fields/hooks/context_menu_hook'
@@ -54,5 +58,9 @@ CustomField.safe_attributes(
 
 QueryCustomFieldColumn.prepend RedmineDependingCustomFields::Patches::QueryCustomFieldColumnPatch
 CustomField.prepend RedmineDependingCustomFields::Patches::CustomFieldPatch
-ContextMenusController.prepend RedmineDependingCustomFields::Patches::ContextMenusControllerPatch
+if defined?(ContextMenusController)
+  ContextMenusController.prepend RedmineDependingCustomFields::Patches::ContextMenusControllerPatch
+else
+  IssuesController.prepend RedmineDependingCustomFields::Patches::IssuesControllerPatch
+end
 IssueImport.prepend RedmineDependingCustomFields::Patches::IssueImportPatch

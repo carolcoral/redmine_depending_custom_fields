@@ -1,18 +1,18 @@
-# Patch that removes depending custom fields from the default issue context menu
-# and cleans up grouped user options. It delegates to MappingBuilder to know
-# which fields to hide.
+# Patch that removes depending custom fields from the issue context menu
+# in Redmine 6.0+. Since ContextMenusController was merged into IssuesController,
+# we intercept the context_menu action to filter custom fields and clean up
+# grouped user options before rendering.
 #
-# Note: ContextMenusController was removed in Redmine 6.0+ (merged into
-# IssuesController). This patch is only applied when the class exists
-# (Redmine < 6.0). The guard is in init.rb.
+# Applied only when ContextMenusController is not defined (Redmine >= 6.0).
+# The guard is in init.rb.
 
 module RedmineDependingCustomFields
   module Patches
-    module ContextMenusControllerPatch
+    module IssuesControllerPatch
       def render(*args, **kwargs, &block)
         if respond_to?(:params) &&
-           params[:controller] == 'context_menus' &&
-           params[:action] == 'issues'
+           params[:controller] == 'issues' &&
+           params[:action] == 'context_menu'
           begin
             filter_depending_custom_fields
             remove_illegal_user_values
@@ -38,6 +38,7 @@ module RedmineDependingCustomFields
           @options_by_custom_field.reject! { |field, _| ids.include?(field.id) }
         end
       end
+
       def remove_illegal_user_values
         return unless instance_variable_defined?(:@options_by_custom_field)
 
